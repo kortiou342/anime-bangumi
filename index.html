@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>🍿 动漫追番 · Bangumi 数据</title>
+    <meta name="referrer" content="no-referrer" />
+    <title>🍿 动漫追番 · 跳转观看</title>
     <style>
-        /* ===== CSS 变量 & 重置 ===== */
+        /* ===== 样式（与之前一致，但增加观看按钮） ===== */
         * {
             margin: 0;
             padding: 0;
@@ -53,13 +54,11 @@
             border-radius: 8px;
         }
 
-        /* ===== 布局 ===== */
         .container {
             max-width: 1280px;
             margin: 0 auto;
         }
 
-        /* ===== 头部 ===== */
         .header {
             display: flex;
             flex-wrap: wrap;
@@ -123,19 +122,14 @@
         .status-dot.error {
             background: #f85149;
         }
+        .status-dot.fallback {
+            background: #d29922;
+        }
         @keyframes pulse-dot {
-            0%,
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 0.4;
-                transform: scale(0.8);
-            }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
         }
 
-        /* ===== 搜索 & 过滤 ===== */
         .toolbar {
             display: flex;
             flex-wrap: wrap;
@@ -206,7 +200,6 @@
             margin-left: 4px;
         }
 
-        /* ===== 番剧网格 ===== */
         .anime-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -317,7 +310,6 @@
             color: #f0883e;
         }
 
-        /* ===== 空状态 ===== */
         .empty-state {
             text-align: center;
             padding: 60px 20px;
@@ -343,7 +335,6 @@
             background: var(--accent-glow);
         }
 
-        /* ===== 详情弹窗 ===== */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -449,8 +440,44 @@
             border-radius: 30px;
             font-weight: 600;
         }
+        .watch-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+        .watch-btn {
+            padding: 10px 24px;
+            border-radius: 40px;
+            border: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .watch-btn.bilibili {
+            background: #00a1d6;
+            color: #fff;
+        }
+        .watch-btn.bilibili:hover {
+            background: #00b5e5;
+            transform: scale(1.02);
+        }
+        .watch-btn.youku {
+            background: #00b4e3;
+            color: #fff;
+        }
+        .watch-btn.youku:hover {
+            background: #1fc8f0;
+            transform: scale(1.02);
+        }
+        .watch-btn:active {
+            transform: scale(0.96);
+        }
 
-        /* ===== 响应式 ===== */
         @media (max-width: 600px) {
             .header {
                 flex-direction: column;
@@ -470,6 +497,10 @@
                 width: 100px;
                 height: 140px;
             }
+            .watch-btn {
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
         }
         @media (max-width: 420px) {
             .anime-grid {
@@ -484,18 +515,6 @@
             }
         }
 
-        /* ===== 工具类 ===== */
-        .mt-8 {
-            margin-top: 8px;
-        }
-        .flex-center {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .text-muted {
-            color: var(--text-muted);
-        }
         .loading-spinner {
             display: inline-block;
             width: 18px;
@@ -506,9 +525,18 @@
             animation: spin 0.7s linear infinite;
         }
         @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+            to { transform: rotate(360deg); }
+        }
+        .text-muted {
+            color: var(--text-muted);
+        }
+        .mt-8 {
+            margin-top: 8px;
+        }
+        .flex-center {
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
     </style>
 </head>
@@ -518,7 +546,7 @@
         <header class="header">
             <div class="logo">
                 🎬 动漫源
-                <span>· Bangumi 数据</span>
+                <span>· 跳转观看</span>
             </div>
             <div class="header-actions">
                 <div class="status-chip">
@@ -609,6 +637,7 @@
 <div style="margin-top:20px; font-size:0.8rem; color:var(--text-muted); text-align:center; border-top:1px solid var(--border); padding-top:20px;">
     <span>📡 数据来源：<a href="https://bangumi.tv" target="_blank">Bangumi 番组计划</a> 公开 API</span>
     <span style="display:inline-block; margin-left:16px;">📦 共 {{ animeList.length }} 部番剧</span>
+    <span v-if="isFallback" style="display:inline-block; margin-left:16px; color:#d29922;">⚠️ 使用备用数据</span>
 </div>
 
 <!-- ====== 详情弹窗 ====== -->
@@ -644,8 +673,32 @@
             <div v-else class="desc" style="color:var(--text-muted);font-style:italic;">
                 暂无简介
             </div>
+
+            <!-- ====== 观看跳转按钮 ====== -->
+            <div>
+                <strong>▶ 观看方式</strong>
+                <div class="watch-buttons">
+                    <a
+                    class="watch-btn bilibili"
+                    :href="getBilibiliSearch(detailAnime.title)"
+                    target="_blank"
+                    >
+                    🅱️ 在B站搜索
+                </a>
+                <a
+                class="watch-btn youku"
+                :href="getYoukuSearch(detailAnime.title)"
+                target="_blank"
+                >
+                📺 在优酷搜索
+            </a>
         </div>
+        <p style="font-size:0.75rem; color:var(--text-muted); margin-top:6px;">
+            💡 点击后将跳转到对应平台搜索该番剧，您可在官网观看正版内容。
+        </p>
     </div>
+</div>
+</div>
 </div>
 </div>
 
@@ -659,36 +712,70 @@
         const { createApp, ref, computed, onMounted } = Vue;
 
         // ============================================================
-        //  🌐 Bangumi API 服务
+        //  🌐 Bangumi API 服务 + 备用数据
         // ============================================================
-        const BANGUMI_API = {
-            // 获取当前季度番剧 (2025年春季)
-            // 注意: Bangumi API 的 season 参数格式为 yyyy-mm
-            getSeason: async function(year, month) {
-                const season = `${year}-${String(month).padStart(2, '0')}`;
-                const url = `https://api.bgm.tv/calendar?${Date.now()}`;
-                // 使用 calendar 接口获取当周每日番剧
-                // 更稳定: 使用 /calendar 返回每周7天的数据
-                const resp = await fetch(url);
-                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-                return resp.json();
-            },
 
-            // 获取番剧详细信息 (用于补全)
-            getSubject: async function(id) {
-                const url = `https://api.bgm.tv/v0/subjects/${id}`;
-                const resp = await fetch(url);
-                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-                return resp.json();
+        // ----- 备用数据（当 API 失败时使用） -----
+        const FALLBACK_DATA = [
+            { id: 1, title: '葬送的芙莉莲', title_cn: '', year: '2023', cover: 'https://picsum.photos/seed/frieren/400/560', tags: ['奇幻', '冒险'], score: 8.7, rank: 12, summary: '魔法使芙莉莲与勇者一行击败魔王后，踏上新的旅程。时间流逝，她逐渐理解人类的感情……', status: 'finished', url: '#' },
+            { id: 2, title: '咒术回战 第二季', title_cn: '', year: '2023', cover: 'https://picsum.photos/seed/jujutsu/400/560', tags: ['战斗', '奇幻'], score: 8.5, rank: 20, summary: '虎杖悠仁与伙伴们继续与咒灵战斗，怀玉篇与涩谷事变篇拉开帷幕……', status: 'airing', url: '#' },
+            { id: 3, title: 'SPY×FAMILY 第二季', title_cn: '', year: '2023', cover: 'https://picsum.photos/seed/spyfamily/400/560', tags: ['喜剧', '日常'], score: 8.3, rank: 35, summary: '伪装家庭的搞笑日常继续，阿尼亚的校园生活与黄昏的秘密任务交织……', status: 'finished', url: '#' },
+            { id: 4, title: '药屋少女的独语', title_cn: '', year: '2023', cover: 'https://picsum.photos/seed/apothecary/400/560', tags: ['悬疑', '古风'], score: 8.2, rank: 42, summary: '在宫中担任下人的猫猫，凭借药学知识解决各种疑难事件……', status: 'airing', url: '#' },
+            { id: 5, title: '我推的孩子', title_cn: '', year: '2023', cover: 'https://picsum.photos/seed/oshi/400/560', tags: ['悬疑', '偶像'], score: 8.1, rank: 50, summary: '星野爱之死背后隐藏的真相，双胞胎兄妹踏入演艺圈……', status: 'finished', url: '#' },
+            { id: 6, title: '迷宫饭', title_cn: '', year: '2024', cover: 'https://picsum.photos/seed/dungeon/400/560', tags: ['奇幻', '美食'], score: 8.0, rank: 60, summary: '在迷宫中与魔物搏斗，顺便把它们做成美食！', status: 'airing', url: '#' },
+            { id: 7, title: '怪兽 第8号', title_cn: '', year: '2024', cover: 'https://picsum.photos/seed/kaiju/400/560', tags: ['战斗', '科幻'], score: 7.9, rank: 70, summary: '日比野卡夫卡变身为怪兽，为守护人类而战……', status: 'airing', url: '#' },
+        ];
+
+        // ----- Bangumi API 调用 -----
+        async function fetchBangumiData() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1;
+            const url = `https://api.bgm.tv/calendar?t=${Date.now()}`;
+            const resp = await fetch(url);
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            const data = await resp.json();
+
+            const all = [];
+            const seen = new Set();
+            for (const day of data) {
+                for (const item of day.items || []) {
+                    const id = item.id;
+                    if (seen.has(id)) continue;
+                    seen.add(id);
+                    let detail = null;
+                    try {
+                        const detailUrl = `https://api.bgm.tv/v0/subjects/${id}`;
+                        const dResp = await fetch(detailUrl);
+                        if (dResp.ok) detail = await dResp.json();
+                    } catch (_) {}
+
+                    const anime = {
+                        id: id,
+                        title: item.name || '未知',
+                        title_cn: item.name_cn || '',
+                        cover: item.images?.common || item.images?.medium || '',
+                        year: item.date ? item.date.split('-')[0] : '',
+                        tags: detail?.tags?.map(t => t.name) || [],
+                        score: detail?.rating?.score || item.rating?.score || null,
+                        rank: detail?.rating?.rank || null,
+                        summary: detail?.summary || item.summary || '',
+                        status: detail?.status || item.status || 'airing',
+                        url: `https://bangumi.tv/subject/${id}`,
+                    };
+                    all.push(anime);
+                }
             }
-        };
+            // 按评分排序
+            all.sort((a, b) => (b.score || 0) - (a.score || 0));
+            return all;
+        }
 
         // ============================================================
         //  🚀 Vue App
         // ============================================================
         const app = createApp({
             setup() {
-                // --- 响应式数据 ---
                 const animeList = ref([]);
                 const searchQuery = ref('');
                 const activeFilter = ref('all');
@@ -698,15 +785,14 @@
                 const error = ref(null);
                 const statusText = ref('就绪');
                 const statusDotClass = ref('online');
+                const isFallback = ref(false);
 
-                // 筛选选项
                 const filters = [
                     { key: 'all', label: '全部' },
                     { key: 'airing', label: '放送中' },
                     { key: 'finished', label: '已完结' },
                 ];
 
-                // --- 计算属性 ---
                 const filteredList = computed(() => {
                     let list = animeList.value;
                     if (activeFilter.value !== 'all') {
@@ -722,87 +808,40 @@
                     return list;
                 });
 
-                // --- 方法 ---
+                // 跳转搜索链接
+                function getBilibiliSearch(title) {
+                    return `https://search.bilibili.com/all?keyword=${encodeURIComponent(title)}`;
+                }
+                function getYoukuSearch(title) {
+                    return `https://so.youku.com/search_video/q_${encodeURIComponent(title)}`;
+                }
 
-                // 从 Bangumi 获取数据
                 async function fetchData() {
                     if (loading.value) return;
                     loading.value = true;
                     error.value = null;
                     statusText.value = '加载中...';
                     statusDotClass.value = 'loading';
+                    isFallback.value = false;
 
                     try {
-                        // 获取当前日期
-                        const now = new Date();
-                        const year = now.getFullYear();
-                        const month = now.getMonth() + 1;
-
-                        // 使用 calendar 获取当周数据
-                        const calendarData = await BANGUMI_API.getSeason(year, month);
-
-                        // calendar 返回 { weekday: [subjects] }
-                        // 合并所有番剧并去重
-                        const allSubjects = [];
-                        const seenIds = new Set();
-
-                        for (const day of calendarData) {
-                            for (const item of day.items || []) {
-                                // item 结构: { id, name, name_cn, images, air_weekday, ... }
-                                const subjectId = item.id;
-                                if (seenIds.has(subjectId)) continue;
-                                seenIds.add(subjectId);
-
-                                // 补全详细信息 (评分、简介等)
-                                let detail = null;
-                                try {
-                                    detail = await BANGUMI_API.getSubject(subjectId);
-                                } catch (_) {
-                                    // 如果获取详情失败，使用基础数据
-                                }
-
-                                // 合并数据
-                                const anime = {
-                                    id: subjectId,
-                                    title: item.name || '未知标题',
-                                    title_cn: item.name_cn || '',
-                                    cover: item.images?.common || item.images?.medium || '',
-                                    year: item.date ? item.date.split('-')[0] : '',
-                                    tags: detail?.tags?.map(t => t.name) || item.tags || [],
-                                    score: detail?.rating?.score || item.rating?.score || null,
-                                    rank: detail?.rating?.rank || null,
-                                    summary: detail?.summary || item.summary || '',
-                                    status: detail?.status || item.status || 'airing',
-                                    url: `https://bangumi.tv/subject/${subjectId}`,
-                                    // 从 detail 中取更准确的数据
-                                    eps: detail?.eps || item.eps || 0,
-                                };
-
-                                // 状态映射
-                                const statusMap = {
-                                    'airing': '放送中',
-                                    'finished': '已完结',
-                                    'not_yet_aired': '未放送',
-                                };
-                                anime.status_label = statusMap[anime.status] || anime.status;
-
-                                allSubjects.push(anime);
-                            }
-                        }
-
-                        // 按评分排序（高分在前）
-                        allSubjects.sort((a, b) => (b.score || 0) - (a.score || 0));
-
-                        animeList.value = allSubjects;
-                        statusText.value = `已加载 ${allSubjects.length} 部番剧`;
+                        const data = await fetchBangumiData();
+                        if (data.length === 0) throw new Error('API 返回空数据');
+                        animeList.value = data;
+                        statusText.value = `已加载 ${data.length} 部番剧`;
                         statusDotClass.value = 'online';
-
                     } catch (err) {
-                        console.error('Bangumi API 错误:', err);
-                        error.value = `加载失败: ${err.message || '请检查网络后重试'}`;
-                        statusText.value = '❌ 加载失败';
-                        statusDotClass.value = 'error';
-                        // 如果出错但已有数据，保留旧数据
+                        console.warn('Bangumi API 失败，使用备用数据:', err);
+                        // 使用备用数据
+                        animeList.value = FALLBACK_DATA.map(item => ({
+                            ...item,
+                            status: item.status || 'airing',
+                            tags: item.tags || [],
+                        }));
+                        isFallback.value = true;
+                        statusText.value = `使用备用数据 (${animeList.value.length} 部)`;
+                        statusDotClass.value = 'fallback';
+                        error.value = '无法连接 Bangumi，当前显示示例数据';
                     } finally {
                         loading.value = false;
                     }
@@ -817,9 +856,7 @@
                     activeFilter.value = key;
                 }
 
-                function onSearch() {
-                    // 由 computed 自动触发
-                }
+                function onSearch() {}
 
                 function openDetail(anime) {
                     detailAnime.value = anime;
@@ -833,7 +870,6 @@
                     setTimeout(() => { detailAnime.value = null; }, 300);
                 }
 
-                // --- 生命周期 ---
                 onMounted(() => {
                     fetchData();
                 });
@@ -848,6 +884,7 @@
                     error,
                     statusText,
                     statusDotClass,
+                    isFallback,
                     filters,
                     filteredList,
                     getCountByFilter,
@@ -856,6 +893,8 @@
                     openDetail,
                     closeDetail,
                     fetchData,
+                    getBilibiliSearch,
+                    getYoukuSearch,
                 };
             }
         });
@@ -865,3 +904,5 @@
 </script>
 </body>
 </html>
+
+ 
