@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="referrer" content="no-referrer" />
-    <title>🎬 动漫全聚合 · 分类检索</title>
+    <title>🎬 动漫全聚合 · 四源合并</title>
     <style>
-        /* ===== 基础样式 ===== */
+        /* ===== 样式（与之前版本一致，略有精简） ===== */
         * {
             margin: 0;
             padding: 0;
@@ -57,8 +57,6 @@
             max-width: 1400px;
             margin: 0 auto;
         }
-
-        /* ===== 头部 ===== */
         .header {
             display: flex;
             flex-wrap: wrap;
@@ -126,18 +124,9 @@
             background: #d29922;
         }
         @keyframes pulse-dot {
-            0%,
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 0.4;
-                transform: scale(0.8);
-            }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
         }
-
-        /* ===== 搜索 & 筛选栏 ===== */
         .toolbar {
             display: flex;
             flex-wrap: wrap;
@@ -176,7 +165,6 @@
             color: var(--text-muted);
             font-size: 1.1rem;
         }
-
         .filter-group {
             display: flex;
             flex-wrap: wrap;
@@ -194,14 +182,12 @@
             transition: var(--transition);
             min-width: 100px;
         }
-        .filter-select:hover,
-        .filter-select:focus {
+        .filter-select:hover, .filter-select:focus {
             border-color: var(--accent);
         }
         .filter-select option {
             background: var(--bg-secondary);
         }
-
         .filter-btn {
             padding: 8px 18px;
             border-radius: 40px;
@@ -228,8 +214,6 @@
             color: var(--text-secondary);
             margin-left: 4px;
         }
-
-        /* ===== 番剧网格 ===== */
         .anime-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -331,8 +315,6 @@
             background: var(--accent-glow);
             color: var(--accent);
         }
-
-        /* ===== 空状态 ===== */
         .empty-state {
             text-align: center;
             padding: 60px 20px;
@@ -357,8 +339,6 @@
             border-color: var(--accent);
             background: var(--accent-glow);
         }
-
-        /* ===== 详情弹窗 ===== */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -490,79 +470,6 @@
         .watch-btn:active {
             transform: scale(0.96);
         }
-
-        /* ===== 响应式 ===== */
-        @media (max-width: 600px) {
-            .header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .header-actions {
-                justify-content: space-between;
-            }
-            .anime-grid {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-                gap: 14px;
-            }
-            .modal {
-                padding: 20px 16px;
-            }
-            .modal-body .cover-row img {
-                width: 100px;
-                height: 140px;
-            }
-            .watch-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            .filter-group {
-                width: 100%;
-            }
-            .filter-select {
-                flex: 1;
-                min-width: 80px;
-            }
-        }
-        @media (max-width: 420px) {
-            .anime-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-            }
-            .anime-meta {
-                padding: 10px 10px 12px;
-            }
-            .anime-title {
-                font-size: 0.8rem;
-            }
-            .watch-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 18px;
-            height: 18px;
-            border: 2px solid var(--border);
-            border-top-color: var(--accent);
-            border-radius: 50%;
-            animation: spin 0.7s linear infinite;
-        }
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-        .text-muted {
-            color: var(--text-muted);
-        }
-        .mt-8 {
-            margin-top: 8px;
-        }
-        .flex-center {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
         .tag-cloud {
             display: flex;
             flex-wrap: wrap;
@@ -576,485 +483,539 @@
             font-size: 0.7rem;
             color: var(--text-secondary);
         }
+        @media (max-width: 600px) {
+            .header { flex-direction: column; align-items: stretch; }
+            .header-actions { justify-content: space-between; }
+            .anime-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+            .modal { padding: 20px 16px; }
+            .modal-body .cover-row img { width: 100px; height: 140px; }
+            .watch-grid { grid-template-columns: repeat(3, 1fr); }
+            .filter-group { width: 100%; }
+            .filter-select { flex: 1; min-width: 80px; }
+        }
+        @media (max-width: 420px) {
+            .anime-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .anime-meta { padding: 10px 10px 12px; }
+            .anime-title { font-size: 0.8rem; }
+            .watch-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .text-muted { color: var(--text-muted); }
+        .mt-8 { margin-top: 8px; }
+        .flex-center { display: flex; align-items: center; gap: 6px; }
     </style>
 </head>
 <body>
-    <div class="container" id="app">
-        <!-- ====== 头部 ====== -->
-        <header class="header">
-            <div class="logo">
-                🎬 动漫全聚合
-                <span>· 分类检索</span>
+<div class="container" id="app">
+    <!-- 头部 -->
+    <header class="header">
+        <div class="logo">🎬 动漫全聚合 <span>· 四源合并</span></div>
+        <div class="header-actions">
+            <div class="status-chip">
+                <span class="status-dot" :class="statusDotClass"></span>
+                <span>{{ statusText }}</span>
             </div>
-            <div class="header-actions">
-                <div class="status-chip">
-                    <span class="status-dot" :class="statusDotClass"></span>
-                    <span>{{ statusText }}</span>
-                </div>
-                <button class="filter-btn" @click="fetchData" :disabled="loading">
-                    <span v-if="loading" class="loading-spinner"></span>
-                    <span v-else>🔄</span>
-                    {{ loading ? '加载中' : '刷新' }}
-                </button>
-            </div>
-        </header>
-
-        <!-- ====== 搜索 & 筛选 ====== -->
-        <div class="toolbar">
-            <div class="search-box">
-                <span class="icon">🔍</span>
-                <input type="text" placeholder="搜索番剧..." v-model="searchQuery" @input="onSearch" />
-            </div>
-            <div class="filter-group">
-                <select class="filter-select" v-model="filters.year">
-                    <option value="">全部年份</option>
-                    <option v-for="y in availableYears" :key="y" :value="y">{{ y }}</option>
-                </select>
-                <select class="filter-select" v-model="filters.region">
-                    <option value="">全部地区</option>
-                    <option v-for="r in availableRegions" :key="r" :value="r">{{ r }}</option>
-                </select>
-                <select class="filter-select" v-model="filters.type">
-                    <option value="">全部类型</option>
-                    <option v-for="t in availableTypes" :key="t" :value="t">{{ t }}</option>
-                </select>
-                <button class="filter-btn" :class="{ active: filters.status === 'airing' }" @click="toggleStatus('airing')">放送中</button>
-                <button class="filter-btn" :class="{ active: filters.status === 'finished' }" @click="toggleStatus('finished')">已完结</button>
-                <button class="filter-btn" :class="{ active: filters.status === '' }" @click="toggleStatus('')">全部</button>
-            </div>
+            <button class="filter-btn" @click="fetchData" :disabled="loading">
+                <span v-if="loading" class="loading-spinner"></span>
+                <span v-else>🔄</span>
+                {{ loading ? '加载中' : '刷新' }}
+            </button>
         </div>
+    </header>
 
-        <!-- ====== 番剧列表 ====== -->
-        <div v-if="filteredList.length" class="anime-grid">
-            <div class="anime-card" v-for="anime in filteredList" :key="anime.id" @click="openDetail(anime)">
-                <div class="anime-cover">
-                    <img v-if="anime.cover" :src="anime.cover" :alt="anime.title" loading="lazy" @error="e => e.target.style.display = 'none'" />
-                    <div v-if="!anime.cover" class="placeholder">🎞️</div>
-                </div>
-                <div class="anime-meta">
-                    <div class="anime-title">
-                        {{ anime.title }}
-                        <span class="cn" v-if="anime.title_cn && anime.title_cn !== anime.title">{{ anime.title_cn }}</span>
-                    </div>
-                    <div class="anime-info">
-                        <span class="year">{{ anime.year || '?' }}</span>
-                        <span class="eps">
-                            ⭐ <span v-if="anime.score">{{ anime.score }}</span><span v-else>—</span>
-                            <span v-if="anime.tags && anime.tags.length" class="tag">{{ anime.tags[0] }}</span>
-                        </span>
-                    </div>
-                </div>
+    <!-- 搜索 & 筛选 -->
+    <div class="toolbar">
+        <div class="search-box">
+            <span class="icon">🔍</span>
+            <input type="text" placeholder="搜索番剧..." v-model="searchQuery" @input="onSearch" />
+        </div>
+        <div class="filter-group">
+            <select class="filter-select" v-model="filters.year">
+                <option value="">全部年份</option>
+                <option v-for="y in availableYears" :key="y" :value="y">{{ y }}</option>
+            </select>
+            <select class="filter-select" v-model="filters.region">
+                <option value="">全部地区</option>
+                <option v-for="r in availableRegions" :key="r" :value="r">{{ r }}</option>
+            </select>
+            <select class="filter-select" v-model="filters.type">
+                <option value="">全部类型</option>
+                <option v-for="t in availableTypes" :key="t" :value="t">{{ t }}</option>
+            </select>
+            <button class="filter-btn" :class="{ active: filters.status === 'airing' }" @click="toggleStatus('airing')">放送中</button>
+            <button class="filter-btn" :class="{ active: filters.status === 'finished' }" @click="toggleStatus('finished')">已完结</button>
+            <button class="filter-btn" :class="{ active: filters.status === '' }" @click="toggleStatus('')">全部</button>
+        </div>
+    </div>
+
+    <!-- 番剧列表 -->
+    <div v-if="filteredList.length" class="anime-grid">
+        <div class="anime-card" v-for="anime in filteredList" :key="anime.id" @click="openDetail(anime)">
+            <div class="anime-cover">
+                <img v-if="anime.cover" :src="anime.cover" :alt="anime.title" loading="lazy" @error="e => e.target.style.display = 'none'" />
+                <div v-if="!anime.cover" class="placeholder">🎞️</div>
             </div>
-        </div>
-        <div v-else class="empty-state">
-            <div class="big-icon">📭</div>
-            <p v-if="error">{{ error }}</p>
-            <p v-else-if="loading">⏳ 加载中...</p>
-            <p v-else>没有匹配的番剧</p>
-            <p style="font-size:0.85rem; margin-top:6px;" v-if="!loading && !error">请调整筛选条件</p>
-            <button v-if="error" class="retry-btn" @click="fetchData">🔄 重试</button>
-        </div>
-
-        <!-- ====== 底部信息 ====== -->
-        <div style="margin-top:20px; font-size:0.8rem; color:var(--text-muted); text-align:center; border-top:1px solid var(--border); padding-top:20px;">
-            <span>📡 数据来源：Bangumi 公开 API ＋ 扩展数据集</span>
-            <span style="display:inline-block; margin-left:16px;">📦 共 {{ animeList.length }} 部</span>
-            <span v-if="isFallback" style="display:inline-block; margin-left:16px; color:#d29922;">⚠️ 当前使用备用数据</span>
-        </div>
-
-        <!-- ====== 详情弹窗 ====== -->
-        <div class="modal-overlay" :class="{ open: detailVisible }" @click.self="closeDetail">
-            <div class="modal" v-if="detailAnime">
-                <button class="modal-close" @click="closeDetail">✕</button>
-                <div class="modal-title">
-                    {{ detailAnime.title }}
-                    <span class="sub" v-if="detailAnime.title_cn && detailAnime.title_cn !== detailAnime.title">{{ detailAnime.title_cn }}</span>
+            <div class="anime-meta">
+                <div class="anime-title">
+                    {{ anime.title }}
+                    <span class="cn" v-if="anime.title_cn && anime.title_cn !== anime.title">{{ anime.title_cn }}</span>
                 </div>
-                <div class="modal-body">
-                    <div class="cover-row">
-                        <img v-if="detailAnime.cover" :src="detailAnime.cover" :alt="detailAnime.title" @error="e => e.target.style.display = 'none'" />
-                        <div v-if="!detailAnime.cover" style="width:140px;height:200px;background:var(--bg-card);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:3rem;color:var(--text-muted);">🎞️</div>
-                        <div class="details">
-                            <p><strong>📅 年份</strong> {{ detailAnime.year || '未知' }}</p>
-                            <p><strong>🏷️ 标签</strong> <span class="tag-cloud"><span class="tag" v-for="t in detailAnime.tags" :key="t">{{ t }}</span></span></p>
-                            <p><strong>⭐ 评分</strong> <span class="score">{{ detailAnime.score || '暂无' }}</span></p>
-                            <p><strong>📊 排名</strong> {{ detailAnime.rank || '暂无' }}</p>
-                            <p><strong>🔗 Bangumi</strong> <a :href="detailAnime.url" target="_blank">查看详情</a></p>
-                        </div>
-                    </div>
-                    <div class="desc" v-if="detailAnime.summary">{{ detailAnime.summary }}</div>
-                    <div v-else class="desc" style="color:var(--text-muted);font-style:italic;">暂无简介</div>
-
-                    <div>
-                        <strong>▶ 观看平台</strong>
-                        <div class="watch-grid">
-                            <a v-for="p in platforms" :key="p.name" class="watch-btn" :href="p.search(detailAnime.title)" target="_blank">
-                                {{ p.name }}
-                            </a>
-                        </div>
-                        <p style="font-size:0.75rem; color:var(--text-muted); margin-top:6px;">
-                            💡 点击跳转至对应平台搜索该番剧，支持正版观看。
-                        </p>
-                    </div>
+                <div class="anime-info">
+                    <span class="year">{{ anime.year || '?' }}</span>
+                    <span class="eps">
+                        ⭐ <span v-if="anime.score">{{ anime.score }}</span><span v-else>—</span>
+                        <span v-if="anime.tags && anime.tags.length" class="tag">{{ anime.tags[0] }}</span>
+                    </span>
                 </div>
             </div>
         </div>
     </div>
+    <div v-else class="empty-state">
+        <div class="big-icon">📭</div>
+        <p v-if="error">{{ error }}</p>
+        <p v-else-if="loading">⏳ 加载中...</p>
+        <p v-else>没有匹配的番剧</p>
+        <p style="font-size:0.85rem; margin-top:6px;" v-if="!loading && !error">请调整筛选条件</p>
+        <button v-if="error" class="retry-btn" @click="fetchData">🔄 重试</button>
+    </div>
 
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <script>
-        (function() {
-            const { createApp, ref, computed, onMounted, watch } = Vue;
+    <!-- 底部信息 -->
+    <div style="margin-top:20px; font-size:0.8rem; color:var(--text-muted); text-align:center; border-top:1px solid var(--border); padding-top:20px;">
+        <span>📡 数据来源：Bangumi · Jikan (MyAnimeList) · AniList · Kitsu</span>
+        <span style="display:inline-block; margin-left:16px;">📦 共 {{ animeList.length }} 部</span>
+        <span v-if="isFallback" style="display:inline-block; margin-left:16px; color:#d29922;">⚠️ 当前使用备用数据</span>
+    </div>
 
-            // ============================================================
-            //  📚 平台列表（跳转搜索）
-            // ============================================================
-            const PLATFORMS = [
-                { name: 'B站', search: (t) => `https://search.bilibili.com/all?keyword=${encodeURIComponent(t)}` },
-                { name: '优酷', search: (t) => `https://so.youku.com/search_video/q_${encodeURIComponent(t)}` },
-                { name: '腾讯视频', search: (t) => `https://v.qq.com/x/search/?q=${encodeURIComponent(t)}` },
-                { name: '爱奇艺', search: (t) => `https://so.iqiyi.com/so/q_${encodeURIComponent(t)}` },
-                { name: 'AcFun', search: (t) => `https://www.acfun.cn/search?keyword=${encodeURIComponent(t)}` },
-                { name: '芒果TV', search: (t) => `https://search.mgtv.com/?keyword=${encodeURIComponent(t)}` },
-                { name: '西瓜视频', search: (t) => `https://www.ixigua.com/search/${encodeURIComponent(t)}` },
-                { name: 'Netflix', search: (t) => `https://www.netflix.com/search?q=${encodeURIComponent(t)}` },
-            ];
+    <!-- 详情弹窗 -->
+    <div class="modal-overlay" :class="{ open: detailVisible }" @click.self="closeDetail">
+        <div class="modal" v-if="detailAnime">
+            <button class="modal-close" @click="closeDetail">✕</button>
+            <div class="modal-title">
+                {{ detailAnime.title }}
+                <span class="sub" v-if="detailAnime.title_cn && detailAnime.title_cn !== detailAnime.title">{{ detailAnime.title_cn }}</span>
+            </div>
+            <div class="modal-body">
+                <div class="cover-row">
+                    <img v-if="detailAnime.cover" :src="detailAnime.cover" :alt="detailAnime.title" @error="e => e.target.style.display = 'none'" />
+                    <div v-if="!detailAnime.cover" style="width:140px;height:200px;background:var(--bg-card);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:3rem;color:var(--text-muted);">🎞️</div>
+                    <div class="details">
+                        <p><strong>📅 年份</strong> {{ detailAnime.year || '未知' }}</p>
+                        <p><strong>🏷️ 标签</strong> <span class="tag-cloud"><span class="tag" v-for="t in detailAnime.tags" :key="t">{{ t }}</span></span></p>
+                        <p><strong>⭐ 评分</strong> <span class="score">{{ detailAnime.score || '暂无' }}</span></p>
+                        <p><strong>📊 排名</strong> {{ detailAnime.rank || '暂无' }}</p>
+                        <p><strong>🔗 来源</strong> {{ detailAnime.source || '未知' }}</p>
+                    </div>
+                </div>
+                <div class="desc" v-if="detailAnime.summary">{{ detailAnime.summary }}</div>
+                <div v-else class="desc" style="color:var(--text-muted);font-style:italic;">暂无简介</div>
 
-            // ============================================================
-            //  🌐 Bangumi API + 扩展备用数据
-            // ============================================================
-            const EXTENDED_FALLBACK = [{
-                id: 1,
-                title: '葬送的芙莉莲',
-                title_cn: '葬送的芙莉莲',
-                year: '2023',
-                cover: 'https://lain.bgm.tv/pic/cover/l/6b/84/330825_X68j1.jpg',
-                tags: ['奇幻', '冒险', '治愈', '日本动画'],
-                score: 8.7,
-                rank: 12,
-                summary: '魔法使芙莉莲与勇者一行击败魔王后，踏上新的旅程。时间流逝，她逐渐理解人类的感情……',
-                status: 'finished',
-                url: 'https://bangumi.tv/subject/330825'
-            }, {
-                id: 2,
-                title: '咒术回战 第二季',
-                title_cn: '呪術廻戦 第2期',
-                year: '2023',
-                cover: 'https://lain.bgm.tv/pic/cover/l/b0/8f/342273_p4m8j.jpg',
-                tags: ['战斗', '奇幻', '热血', '日本动画'],
-                score: 8.5,
-                rank: 20,
-                summary: '虎杖悠仁与伙伴们继续与咒灵战斗，怀玉篇与涩谷事变篇拉开帷幕……',
-                status: 'airing',
-                url: 'https://bangumi.tv/subject/342273'
-            }, {
-                id: 3,
-                title: 'SPY×FAMILY 第二季',
-                title_cn: '间谍过家家 第二季',
-                year: '2023',
-                cover: 'https://lain.bgm.tv/pic/cover/l/19/3d/355472_1n9c1.jpg',
-                tags: ['喜剧', '日常', '动作', '日本动画'],
-                score: 8.3,
-                rank: 35,
-                summary: '伪装家庭的搞笑日常继续，阿尼亚的校园生活与黄昏的秘密任务交织……',
-                status: 'finished',
-                url: 'https://bangumi.tv/subject/355472'
-            }, {
-                id: 4,
-                title: '药屋少女的独语',
-                title_cn: '药屋少女的独语',
-                year: '2023',
-                cover: 'https://lain.bgm.tv/pic/cover/l/d3/18/356672_U4m1r.jpg',
-                tags: ['悬疑', '古风', '推理', '日本动画'],
-                score: 8.2,
-                rank: 42,
-                summary: '在宫中担任下人的猫猫，凭借药学知识解决各种疑难事件……',
-                status: 'airing',
-                url: 'https://bangumi.tv/subject/356672'
-            }, {
-                id: 5,
-                title: '我推的孩子',
-                title_cn: '【我推的孩子】',
-                year: '2023',
-                cover: 'https://lain.bgm.tv/pic/cover/l/c9/5d/345426_7y6uj.jpg',
-                tags: ['悬疑', '偶像', '剧情', '日本动画'],
-                score: 8.1,
-                rank: 50,
-                summary: '星野爱之死背后隐藏的真相，双胞胎兄妹踏入演艺圈……',
-                status: 'finished',
-                url: 'https://bangumi.tv/subject/345426'
-            }, {
-                id: 6,
-                title: '迷宫饭',
-                title_cn: '迷宫饭',
-                year: '2024',
-                cover: 'https://lain.bgm.tv/pic/cover/l/df/24/365832_7a5s9.jpg',
-                tags: ['奇幻', '美食', '冒险', '日本动画'],
-                score: 8.0,
-                rank: 60,
-                summary: '在迷宫中与魔物搏斗，顺便把它们做成美食！',
-                status: 'airing',
-                url: 'https://bangumi.tv/subject/365832'
-            }, {
-                id: 7,
-                title: '怪兽 第8号',
-                title_cn: '怪兽8号',
-                year: '2024',
-                cover: 'https://lain.bgm.tv/pic/cover/l/c0/aa/371545_x8z2u.jpg',
-                tags: ['战斗', '科幻', '热血', '日本动画'],
-                score: 7.9,
-                rank: 70,
-                summary: '日比野卡夫卡变身为怪兽，为守护人类而战……',
-                status: 'airing',
-                url: 'https://bangumi.tv/subject/371545'
-            }, {
-                id: 8,
-                title: '一人之下 第五季',
-                title_cn: '一人之下 第五季',
-                year: '2024',
-                cover: 'https://picsum.photos/seed/yiren/400/560',
-                tags: ['奇幻', '战斗', '国产动画'],
-                score: 7.8,
-                rank: 80,
-                summary: '张楚岚与冯宝宝继续探索异人世界的秘密……',
-                status: 'airing',
-                url: '#'
-            }, {
-                id: 9,
-                title: '时光代理人 第二季',
-                title_cn: '时光代理人 第二季',
-                year: '2023',
-                cover: 'https://picsum.photos/seed/shiguang/400/560',
-                tags: ['悬疑', '奇幻', '国产动画'],
-                score: 8.4,
-                rank: 25,
-                summary: '程小时与陆光继续使用照片穿梭时空，解决委托……',
-                status: 'finished',
-                url: '#'
-            }, {
-                id: 10,
-                title: '灵笼 第二季',
-                title_cn: '灵笼 第二季',
-                year: '2024',
-                cover: 'https://picsum.photos/seed/linglong/400/560',
-                tags: ['科幻', '战斗', '国产动画'],
-                score: 8.6,
-                rank: 15,
-                summary: '在末日世界中，人类与噬极兽的生存战争持续升级……',
-                status: 'airing',
-                url: '#'
-            }];
+                <div>
+                    <strong>▶ 观看平台</strong>
+                    <div class="watch-grid">
+                        <a v-for="p in platforms" :key="p.name" class="watch-btn" :href="p.search(detailAnime.title)" target="_blank">
+                            {{ p.name }}
+                        </a>
+                    </div>
+                    <p style="font-size:0.75rem; color:var(--text-muted); margin-top:6px;">
+                        💡 点击跳转至对应平台搜索该番剧，支持正版观看。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-            async function fetchBangumiData() {
-                const url = `https://api.bgm.tv/calendar?t=${Date.now()}`;
-                const resp = await fetch(url);
-                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-                const data = await resp.json();
-                const all = [];
-                const seen = new Set();
-                for (const day of data) {
-                    for (const item of day.items || []) {
-                        const id = item.id;
-                        if (seen.has(id)) continue;
-                        seen.add(id);
-                        let detail = null;
-                        try {
-                            const dUrl = `https://api.bgm.tv/v0/subjects/${id}`;
-                            const dResp = await fetch(dUrl);
-                            if (dResp.ok) detail = await dResp.json();
-                        } catch (_) {}
-                        // 组装
-                        const tags = [];
-                        if (detail?.tags) tags.push(...detail.tags.map(t => t.name));
-                        // 提取地区标签（如果包含"日本动画""国产动画"等）
-                        const regionTag = tags.find(t => /日本|国产|中国|欧美/.test(t));
-                        const anime = {
-                            id: id,
-                            title: item.name || '未知',
-                            title_cn: item.name_cn || '',
-                            cover: item.images?.common || item.images?.medium || '',
-                            year: item.date ? item.date.split('-')[0] : '',
-                            tags: tags.length ? tags : ['未分类'],
-                            score: detail?.rating?.score || item.rating?.score || null,
-                            rank: detail?.rating?.rank || null,
-                            summary: detail?.summary || item.summary || '',
-                            status: detail?.status || item.status || 'airing',
-                            url: `https://bangumi.tv/subject/${id}`,
-                            region: regionTag || '未知',
-                        };
-                        all.push(anime);
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+    (function() {
+        const { createApp, ref, computed, onMounted } = Vue;
+
+        // ============================================================
+        // 📚 平台列表（跳转搜索）
+        // ============================================================
+        const PLATFORMS = [
+            { name: 'B站', search: (t) => `https://search.bilibili.com/all?keyword=${encodeURIComponent(t)}` },
+            { name: '优酷', search: (t) => `https://so.youku.com/search_video/q_${encodeURIComponent(t)}` },
+            { name: '腾讯视频', search: (t) => `https://v.qq.com/x/search/?q=${encodeURIComponent(t)}` },
+            { name: '爱奇艺', search: (t) => `https://so.iqiyi.com/so/q_${encodeURIComponent(t)}` },
+            { name: 'AcFun', search: (t) => `https://www.acfun.cn/search?keyword=${encodeURIComponent(t)}` },
+            { name: '芒果TV', search: (t) => `https://search.mgtv.com/?keyword=${encodeURIComponent(t)}` },
+            { name: '西瓜视频', search: (t) => `https://www.ixigua.com/search/${encodeURIComponent(t)}` },
+            { name: 'Netflix', search: (t) => `https://www.netflix.com/search?q=${encodeURIComponent(t)}` },
+        ];
+
+        // ============================================================
+        // 🌐 四个数据源获取函数
+        // ============================================================
+
+        // 1. Bangumi
+        async function fetchBangumi() {
+            const url = `https://api.bgm.tv/calendar?t=${Date.now()}`;
+            const resp = await fetch(url);
+            if (!resp.ok) throw new Error(`Bangumi HTTP ${resp.status}`);
+            const data = await resp.json();
+            const items = [];
+            const seen = new Set();
+            for (const day of data) {
+                for (const item of day.items || []) {
+                    const id = item.id;
+                    if (seen.has(id)) continue;
+                    seen.add(id);
+                    let detail = null;
+                    try {
+                        const dResp = await fetch(`https://api.bgm.tv/v0/subjects/${id}`);
+                        if (dResp.ok) detail = await dResp.json();
+                    } catch (_) {}
+                    const tags = detail?.tags?.map(t => t.name) || [];
+                    const region = tags.find(t => /日本|国产|中国|欧美/.test(t)) || '未知';
+                    items.push({
+                        id: `bgm_${id}`,
+                        title: item.name || '未知',
+                        title_cn: item.name_cn || '',
+                        cover: item.images?.common || item.images?.medium || '',
+                        year: item.date ? item.date.split('-')[0] : '',
+                        tags: tags.length ? tags : ['未分类'],
+                        score: detail?.rating?.score || item.rating?.score || null,
+                        rank: detail?.rating?.rank || null,
+                        summary: detail?.summary || item.summary || '',
+                        status: detail?.status || item.status || 'airing',
+                        url: `https://bangumi.tv/subject/${id}`,
+                        region: region,
+                        source: 'Bangumi'
+                    });
+                }
+            }
+            return items;
+        }
+
+        // 2. Jikan (MyAnimeList 非官方 API) – 获取当前季度
+        async function fetchJikan() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const season = Math.floor(now.getMonth() / 3) + 1;
+            const seasonMap = { 1: 'winter', 2: 'spring', 3: 'summer', 4: 'fall' };
+            const url = `https://api.jikan.moe/v4/seasons/${year}/${seasonMap[season]}?limit=25`;
+            const resp = await fetch(url);
+            if (!resp.ok) throw new Error(`Jikan HTTP ${resp.status}`);
+            const data = await resp.json();
+            return (data.data || []).map(item => {
+                const tags = item.genres?.map(g => g.name) || [];
+                const region = tags.find(t => /Japanese|Chinese|Korean/.test(t)) || '未知';
+                return {
+                    id: `jikan_${item.mal_id}`,
+                    title: item.title || '未知',
+                    title_cn: item.title_english || item.title || '',
+                    cover: item.images?.jpg?.large_image_url || '',
+                    year: item.year ? String(item.year) : '',
+                    tags: tags.length ? tags : ['未分类'],
+                    score: item.score || null,
+                    rank: item.rank || null,
+                    summary: item.synopsis || '',
+                    status: item.status === 'Currently Airing' ? 'airing' : (item.status === 'Finished Airing' ? 'finished' : 'airing'),
+                    url: item.url || '#',
+                    region: region,
+                    source: 'Jikan (MyAnimeList)'
+                };
+            });
+        }
+
+        // 3. AniList (GraphQL) – 获取当季热门
+        async function fetchAniList() {
+            const query = `
+                query {
+                    Page(page: 1, perPage: 25) {
+                        media(type: ANIME, sort: POPULARITY_DESC, status_in: [RELEASING, FINISHED]) {
+                            id
+                            title { romaji english native }
+                            coverImage { large }
+                            startDate { year }
+                            genres
+                            averageScore
+                            popularity
+                            description(asHtml: false)
+                            status
+                            siteUrl
+                        }
                     }
                 }
-                all.sort((a, b) => (b.score || 0) - (a.score || 0));
-                return all;
-            }
+            `;
+            const resp = await fetch('https://graphql.anilist.co', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query })
+            });
+            if (!resp.ok) throw new Error(`AniList HTTP ${resp.status}`);
+            const json = await resp.json();
+            const items = json.data?.Page?.media || [];
+            return items.map(item => {
+                const tags = item.genres || [];
+                const region = tags.find(t => /Japanese|Chinese|Korean/.test(t)) || '未知';
+                const title = item.title?.romaji || item.title?.english || item.title?.native || '未知';
+                return {
+                    id: `anilist_${item.id}`,
+                    title: title,
+                    title_cn: item.title?.native || '',
+                    cover: item.coverImage?.large || '',
+                    year: item.startDate?.year ? String(item.startDate.year) : '',
+                    tags: tags.length ? tags : ['未分类'],
+                    score: item.averageScore ? (item.averageScore / 10) : null,
+                    rank: null,
+                    summary: item.description || '',
+                    status: item.status === 'RELEASING' ? 'airing' : (item.status === 'FINISHED' ? 'finished' : 'airing'),
+                    url: item.siteUrl || '#',
+                    region: region,
+                    source: 'AniList'
+                };
+            });
+        }
 
-            // ============================================================
-            //  🚀 Vue App
-            // ============================================================
-            const app = createApp({
-                setup() {
-                    const animeList = ref([]);
-                    const searchQuery = ref('');
-                    const filters = ref({ year: '', region: '', type: '', status: '' });
-                    const detailVisible = ref(false);
-                    const detailAnime = ref(null);
-                    const loading = ref(false);
-                    const error = ref(null);
-                    const statusText = ref('就绪');
-                    const statusDotClass = ref('online');
-                    const isFallback = ref(false);
-                    const platforms = PLATFORMS;
+        // 4. Kitsu (REST) – 获取当季
+        async function fetchKitsu() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1;
+            const season = Math.ceil(month / 3);
+            // Kitsu 使用 filter[season] 如 "2024-spring"
+            const seasonNames = ['winter', 'spring', 'summer', 'fall'];
+            const seasonName = seasonNames[season - 1];
+            const url = `https://kitsu.io/api/edge/anime?filter[season]=${year}-${seasonName}&sort=-averageRating&page[limit]=25`;
+            const resp = await fetch(url);
+            if (!resp.ok) throw new Error(`Kitsu HTTP ${resp.status}`);
+            const data = await resp.json();
+            return (data.data || []).map(item => {
+                const attrs = item.attributes || {};
+                const tags = attrs.categories || [];
+                const region = '未知'; // Kitsu 没有直接地区标签
+                return {
+                    id: `kitsu_${item.id}`,
+                    title: attrs.titles?.en || attrs.titles?.en_jp || attrs.titles?.ja_jp || '未知',
+                    title_cn: attrs.titles?.en_jp || '',
+                    cover: attrs.posterImage?.large || attrs.posterImage?.medium || '',
+                    year: attrs.startDate ? attrs.startDate.split('-')[0] : '',
+                    tags: tags.length ? tags : ['未分类'],
+                    score: attrs.averageRating ? (parseFloat(attrs.averageRating) / 10) : null,
+                    rank: null,
+                    summary: attrs.synopsis || '',
+                    status: attrs.status === 'current' ? 'airing' : (attrs.status === 'finished' ? 'finished' : 'airing'),
+                    url: `https://kitsu.io/anime/${item.id}`,
+                    region: region,
+                    source: 'Kitsu'
+                };
+            });
+        }
 
-                    // 提取分类选项
-                    const availableYears = computed(() => {
-                        const years = new Set();
-                        animeList.value.forEach(a => { if (a.year) years.add(a.year); });
-                        return Array.from(years).sort((a, b) => b - a);
+        // ============================================================
+        // 🚀 Vue App
+        // ============================================================
+        const app = createApp({
+            setup() {
+                const animeList = ref([]);
+                const searchQuery = ref('');
+                const filters = ref({ year: '', region: '', type: '', status: '' });
+                const detailVisible = ref(false);
+                const detailAnime = ref(null);
+                const loading = ref(false);
+                const error = ref(null);
+                const statusText = ref('就绪');
+                const statusDotClass = ref('online');
+                const isFallback = ref(false);
+                const platforms = PLATFORMS;
+
+                // 分类提取
+                const availableYears = computed(() => {
+                    const years = new Set();
+                    animeList.value.forEach(a => { if (a.year) years.add(a.year); });
+                    return Array.from(years).sort((a, b) => b - a);
+                });
+                const availableRegions = computed(() => {
+                    const regions = new Set();
+                    animeList.value.forEach(a => {
+                        const r = a.region || (a.tags?.find(t => /日本|国产|中国|欧美/.test(t)) || '未知');
+                        regions.add(r);
+                        if (!a.region) a.region = r;
                     });
-                    const availableRegions = computed(() => {
-                        const regions = new Set();
-                        animeList.value.forEach(a => {
-                            if (a.region) regions.add(a.region);
-                            else {
-                                // 从标签中提取
-                                const r = a.tags?.find(t => /日本|国产|中国|欧美/.test(t)) || '未知';
-                                regions.add(r);
-                                a.region = r; // 补全
+                    return Array.from(regions);
+                });
+                const availableTypes = computed(() => {
+                    const types = new Set();
+                    animeList.value.forEach(a => {
+                        (a.tags || []).forEach(t => {
+                            if (!/日本|国产|中国|欧美/.test(t)) types.add(t);
+                        });
+                    });
+                    return Array.from(types).sort();
+                });
+
+                const filteredList = computed(() => {
+                    let list = animeList.value;
+                    const q = searchQuery.value.trim().toLowerCase();
+                    if (q) {
+                        list = list.filter(a =>
+                            a.title.toLowerCase().includes(q) ||
+                            (a.title_cn && a.title_cn.toLowerCase().includes(q))
+                        );
+                    }
+                    if (filters.value.year) list = list.filter(a => a.year === filters.value.year);
+                    if (filters.value.region) list = list.filter(a => a.region === filters.value.region);
+                    if (filters.value.type) list = list.filter(a => (a.tags || []).includes(filters.value.type));
+                    if (filters.value.status) list = list.filter(a => a.status === filters.value.status);
+                    return list;
+                });
+
+                // 合并数据
+                async function fetchData() {
+                    if (loading.value) return;
+                    loading.value = true;
+                    error.value = null;
+                    statusText.value = '加载中...';
+                    statusDotClass.value = 'loading';
+                    isFallback.value = false;
+
+                    try {
+                        // 并行请求四个源
+                        const results = await Promise.allSettled([
+                            fetchBangumi(),
+                            fetchJikan(),
+                            fetchAniList(),
+                            fetchKitsu()
+                        ]);
+
+                        // 收集成功的数据
+                        let all = [];
+                        let sources = [];
+                        results.forEach((result, idx) => {
+                            if (result.status === 'fulfilled') {
+                                const data = result.value;
+                                all = all.concat(data);
+                                const names = ['Bangumi', 'Jikan', 'AniList', 'Kitsu'];
+                                sources.push(names[idx]);
+                            } else {
+                                console.warn(`源 ${['Bangumi','Jikan','AniList','Kitsu'][idx]} 失败:`, result.reason);
                             }
                         });
-                        return Array.from(regions);
-                    });
-                    const availableTypes = computed(() => {
-                        const types = new Set();
-                        animeList.value.forEach(a => {
-                            (a.tags || []).forEach(t => {
-                                // 过滤掉地区类标签
-                                if (!/日本|国产|中国|欧美/.test(t)) types.add(t);
-                            });
-                        });
-                        return Array.from(types).sort();
-                    });
 
-                    // 筛选逻辑
-                    const filteredList = computed(() => {
-                        let list = animeList.value;
-                        const q = searchQuery.value.trim().toLowerCase();
-                        if (q) {
-                            list = list.filter(a =>
-                                a.title.toLowerCase().includes(q) ||
-                                (a.title_cn && a.title_cn.toLowerCase().includes(q))
-                            );
+                        if (all.length === 0) {
+                            // 全部失败，使用备用数据
+                            throw new Error('所有数据源均失败');
                         }
-                        if (filters.value.year) {
-                            list = list.filter(a => a.year === filters.value.year);
-                        }
-                        if (filters.value.region) {
-                            list = list.filter(a => a.region === filters.value.region);
-                        }
-                        if (filters.value.type) {
-                            list = list.filter(a => (a.tags || []).includes(filters.value.type));
-                        }
-                        if (filters.value.status) {
-                            list = list.filter(a => a.status === filters.value.status);
-                        }
-                        return list;
-                    });
 
-                    async function fetchData() {
-                        if (loading.value) return;
-                        loading.value = true;
-                        error.value = null;
-                        statusText.value = '加载中...';
-                        statusDotClass.value = 'loading';
-                        isFallback.value = false;
-
-                        try {
-                            const data = await fetchBangumiData();
-                            if (data.length === 0) throw new Error('API 返回空');
-                            // 补充 region
-                            data.forEach(a => {
-                                if (!a.region) {
-                                    const r = a.tags?.find(t => /日本|国产|中国|欧美/.test(t)) || '未知';
-                                    a.region = r;
-                                }
-                            });
-                            animeList.value = data;
-                            statusText.value = `已加载 ${data.length} 部`;
-                            statusDotClass.value = 'online';
-                        } catch (err) {
-                            console.warn('Bangumi API 失败，使用扩展备用数据:', err);
-                            // 使用扩展备用数据
-                            const fallbackData = EXTENDED_FALLBACK.map(item => ({
-                                ...item,
-                                status: item.status || 'airing',
-                                tags: item.tags || ['未分类'],
-                                region: item.tags?.find(t => /日本|国产|中国|欧美/.test(t)) || '未知',
-                            }));
-                            animeList.value = fallbackData;
-                            isFallback.value = true;
-                            statusText.value = `备用数据 (${fallbackData.length} 部)`;
-                            statusDotClass.value = 'fallback';
-                            error.value = '无法连接 Bangumi，当前显示示例数据';
-                        } finally {
-                            loading.value = false;
+                        // 去重：根据标题（优先英文/罗马音）
+                        const seen = new Set();
+                        const unique = [];
+                        for (const item of all) {
+                            const key = item.title.trim().toLowerCase();
+                            if (!seen.has(key)) {
+                                seen.add(key);
+                                unique.push(item);
+                            }
                         }
+
+                        // 按评分排序
+                        unique.sort((a, b) => (b.score || 0) - (a.score || 0));
+
+                        animeList.value = unique;
+                        statusText.value = `已加载 ${unique.length} 部 (${sources.join('+')})`;
+                        statusDotClass.value = 'online';
+                    } catch (err) {
+                        console.error('数据加载失败:', err);
+                        // 使用内置备用数据（确保页面有内容）
+                        const fallback = [
+                            { id: 'fallback_1', title: '葬送的芙莉莲', title_cn: '葬送的芙莉莲', year: '2023',
+                                cover: 'https://lain.bgm.tv/pic/cover/l/6b/84/330825_X68j1.jpg', tags: ['奇幻', '冒险'],
+                                score: 8.7, summary: '魔法使芙莉莲与勇者一行击败魔王后...', status: 'finished', region: '日本',
+                                source: '备用' },
+                            { id: 'fallback_2', title: '咒术回战 第二季', title_cn: '呪術廻戦 第2期', year: '2023',
+                                cover: 'https://lain.bgm.tv/pic/cover/l/b0/8f/342273_p4m8j.jpg', tags: ['战斗', '奇幻'],
+                                score: 8.5, summary: '虎杖悠仁与伙伴们继续与咒灵战斗...', status: 'airing', region: '日本',
+                                source: '备用' },
+                            { id: 'fallback_3', title: 'SPY×FAMILY 第二季', title_cn: '间谍过家家 第二季', year: '2023',
+                                cover: 'https://lain.bgm.tv/pic/cover/l/19/3d/355472_1n9c1.jpg', tags: ['喜剧', '日常'],
+                                score: 8.3, summary: '伪装家庭的搞笑日常继续...', status: 'finished', region: '日本',
+                                source: '备用' }
+                        ];
+                        animeList.value = fallback;
+                        isFallback.value = true;
+                        statusText.value = `备用数据 (${fallback.length} 部)`;
+                        statusDotClass.value = 'fallback';
+                        error.value = '无法连接数据源，当前显示示例数据';
+                    } finally {
+                        loading.value = false;
                     }
-
-                    function toggleStatus(status) {
-                        if (filters.value.status === status) {
-                            filters.value.status = '';
-                        } else {
-                            filters.value.status = status;
-                        }
-                    }
-
-                    function openDetail(anime) {
-                        detailAnime.value = anime;
-                        detailVisible.value = true;
-                        document.body.style.overflow = 'hidden';
-                    }
-
-                    function closeDetail() {
-                        detailVisible.value = false;
-                        document.body.style.overflow = '';
-                        setTimeout(() => { detailAnime.value = null; }, 300);
-                    }
-
-                    function onSearch() {}
-
-                    onMounted(() => fetchData());
-
-                    // 当筛选变化时重置状态
-                    watch(filters, () => {}, { deep: true });
-
-                    return {
-                        animeList,
-                        searchQuery,
-                        filters,
-                        detailVisible,
-                        detailAnime,
-                        loading,
-                        error,
-                        statusText,
-                        statusDotClass,
-                        isFallback,
-                        platforms,
-                        availableYears,
-                        availableRegions,
-                        availableTypes,
-                        filteredList,
-                        fetchData,
-                        toggleStatus,
-                        openDetail,
-                        closeDetail,
-                        onSearch,
-                    };
                 }
-            });
 
-            app.mount('#app');
-        })();
-    </script>
+                function toggleStatus(status) {
+                    if (filters.value.status === status) {
+                        filters.value.status = '';
+                    } else {
+                        filters.value.status = status;
+                    }
+                }
+
+                function openDetail(anime) {
+                    detailAnime.value = anime;
+                    detailVisible.value = true;
+                    document.body.style.overflow = 'hidden';
+                }
+
+                function closeDetail() {
+                    detailVisible.value = false;
+                    document.body.style.overflow = '';
+                    setTimeout(() => { detailAnime.value = null; }, 300);
+                }
+
+                function onSearch() {}
+
+                onMounted(() => fetchData());
+
+                return {
+                    animeList,
+                    searchQuery,
+                    filters,
+                    detailVisible,
+                    detailAnime,
+                    loading,
+                    error,
+                    statusText,
+                    statusDotClass,
+                    isFallback,
+                    platforms,
+                    availableYears,
+                    availableRegions,
+                    availableTypes,
+                    filteredList,
+                    fetchData,
+                    toggleStatus,
+                    openDetail,
+                    closeDetail,
+                    onSearch,
+                };
+            }
+        });
+
+        app.mount('#app');
+    })();
+</script>
 </body>
 </html>
+    
+      
+   
+  
+       
+     
+       
+
+ 
+ 
+        
